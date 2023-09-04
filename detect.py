@@ -1,13 +1,7 @@
 
 import cv2
 import numpy as np 
-import argparse
-import os
-import sys
 from pathlib import Path
-
-import torch
-import torch.backends.cudnn as cudnn
 
 from models.common import DetectMultiBackend
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadStreams
