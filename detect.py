@@ -18,12 +18,11 @@ from deep_sort.deep_sort.tracker import Tracker
 from deep_sort.tools import generate_detections as gdet
 
 
-
 # Constants.pip install --upgrade pip
 INPUT_WIDTH = 640
 INPUT_HEIGHT = 640
-SCORE_THRESHOLD = 0.5
-NMS_THRESHOLD = 0.45
+SCORE_THRESHOLD = 0.7
+NMS_THRESHOLD = 0.7
 CONFIDENCE_THRESHOLD = 0.7
 
 # Text parameters.
@@ -56,9 +55,16 @@ if __name__ == '__main__':
 	# File Initalization
 	classesFile = open("classes.txt","r")
 	classes = classesFile.read().split('\n')
-	modelWeights = "yolov5s.onnx"
+	modelWeights = "./onnx/yolov5l.onnx"
 	net = cv2.dnn.readNet(modelWeights)
-	cap = cv2.VideoCapture('crowd.mp4')
+	cap = cv2.VideoCapture('./videos/crowd2.mp4')
+	
+	#homography parameter
+	src = np.array([[250, 1], [2236, 10], [2698, 1318], [-286, 1329]], dtype=np.float32)  
+	dst = np.array([[0, 0], [3000, 0], [3000, 1321], [0, 1321]], dtype=np.float32) 
+	homo = cv2.getPerspectiveTransform(src, dst) 
+	
+	
 	
 	# Deepsort Initalization
 	max_cosine_distance = 0.4
@@ -71,12 +77,14 @@ if __name__ == '__main__':
 	# Begin analyze video
 	while True:
 		success, img = cap.read() 
+		dotsimage = np.zeros((1300,2400,3), np.uint8)
 		# Exit the loop if the video ends
 		if not success:
 			break
-		# 
+		
 		outputs = pre_process(img, net)
 		rows = outputs[0].shape[1]
+		# 1920 1080
 		image_height, image_width = img.shape[:2]
 
 		# Resizing factor for yolov5. 
@@ -100,7 +108,7 @@ if __name__ == '__main__':
 				class_id = np.argmax(classes_scores)
 	
 				#  Continue if the class score is above threshold.
-				if (classes_scores[class_id] > SCORE_THRESHOLD):
+				if (classes_scores[class_id] > SCORE_THRESHOLD) and class_id == 0:
 					confidences.append(confidence)
 					class_ids.append(class_id)
 
@@ -139,6 +147,8 @@ if __name__ == '__main__':
 			dbox = list(track.to_tlbr())
 			# DeepSORT -> Writing Track bounding box and ID on the frame using OpenCV.
 			txt = 'people:' + str(track.track_id)
+
+			cv2.circle(dotsimage, (left,top), radius=0, color=(0, 0, 255), thickness=-1)
 			
 			(label_width, label_height), baseline = cv2.getTextSize(txt, cv2.FONT_HERSHEY_SIMPLEX, 1, 1)
 			top_left = tuple(map(int, [int(dbox[0]), int(dbox[1]) - (label_height + baseline)]))
@@ -148,11 +158,18 @@ if __name__ == '__main__':
 			cv2.rectangle(img, (int(dbox[0]), int(dbox[1])), (int(dbox[2]), int(dbox[3])), (255, 0, 0), 1)
 			cv2.rectangle(img, top_left, top_right, (255, 0, 0), -1)
 			cv2.putText(img, txt, org, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1)
-
-        # Press 'q' to exit the loop
-		cv2.imshow("result",img)
+			
+		
+			
+		
+		imgarray = np.array(img)
+		img = cv2.resize(imgarray, (2400, 1300))
+		homoimage = cv2.warpPerspective(imgarray, homo, (2400, 1300))
+		hori = np.concatenate((img, homoimage), axis=1)
+ 		# Press 'q' to exit the loop
+		cv2.imshow("result",hori)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
-
+ 
 	cap.release()
 	cv2.destroyAllWindows()
