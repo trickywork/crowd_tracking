@@ -1,36 +1,23 @@
 
 import cv2
 import numpy as np 
-from pathlib import Path
-
-from models.common import DetectMultiBackend
-from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadStreams
-from utils.general import (LOGGER, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
-                           increment_path, non_max_suppression, print_args, scale_coords, strip_optimizer, xyxy2xywh)
-from utils.plots import Annotator, colors, save_one_box
-from utils.torch_utils import select_device, time_sync
 
 #DeepSORT -> Importing DeepSORT.
-from deep_sort.application_util import preprocessing
 from deep_sort.deep_sort import nn_matching
 from deep_sort.deep_sort.detection import Detection
 from deep_sort.deep_sort.tracker import Tracker
 from deep_sort.tools import generate_detections as gdet
 
-
-# Constants.pip install --upgrade pip
 INPUT_WIDTH = 640
 INPUT_HEIGHT = 640
 SCORE_THRESHOLD = 0.7
 NMS_THRESHOLD = 0.7
 CONFIDENCE_THRESHOLD = 0.7
 
-# Text parameters.
 FONT_FACE = cv2.FONT_HERSHEY_SIMPLEX
 FONT_SCALE = 0.7
 THICKNESS = 1
 
-# Colors
 BLACK  = (0,0,0)
 BLUE   = (255,178,50)
 YELLOW = (0,255,255)
@@ -57,7 +44,7 @@ if __name__ == '__main__':
 	classes = classesFile.read().split('\n')
 	modelWeights = "./onnx/yolov5l.onnx"
 	net = cv2.dnn.readNet(modelWeights)
-	cap = cv2.VideoCapture('./videos/crowd2.mp4')
+	cap = cv2.VideoCapture('./videos/people.mp4')
 	
 	#homography parameter
 	src = np.array([[250, 1], [2236, 10], [2698, 1318], [-286, 1329]], dtype=np.float32)  
@@ -74,7 +61,7 @@ if __name__ == '__main__':
 	metric = nn_matching.NearestNeighborDistanceMetric("cosine", max_cosine_distance, nn_budget)
 	tracker = Tracker(metric)
 	
-	# Begin analyze video
+	# Begin analyzing video
 	while True:
 		success, img = cap.read() 
 		dotsimage = np.zeros((1300,2400,3), np.uint8)
@@ -108,7 +95,7 @@ if __name__ == '__main__':
 				class_id = np.argmax(classes_scores)
 	
 				#  Continue if the class score is above threshold.
-				if (classes_scores[class_id] > SCORE_THRESHOLD) and class_id == 0:
+				if (classes_scores[class_id] > SCORE_THRESHOLD) and class_id != 0:
 					confidences.append(confidence)
 					class_ids.append(class_id)
 
@@ -146,7 +133,7 @@ if __name__ == '__main__':
 			# DeepSORT -> Changing track bbox to top left, bottom right coordinates
 			dbox = list(track.to_tlbr())
 			# DeepSORT -> Writing Track bounding box and ID on the frame using OpenCV.
-			txt = 'people:' + str(track.track_id)
+			txt = 'item:' + str(track.track_id)
 
 			cv2.circle(dotsimage, (left,top), radius=0, color=(0, 0, 255), thickness=-1)
 			
@@ -163,11 +150,11 @@ if __name__ == '__main__':
 			
 		
 		imgarray = np.array(img)
-		img = cv2.resize(imgarray, (2400, 1300))
-		homoimage = cv2.warpPerspective(imgarray, homo, (2400, 1300))
-		hori = np.concatenate((img, homoimage), axis=1)
+		# img = cv2.resize(imgarray, (2400, 1300))
+		# homoimage = cv2.warpPerspective(imgarray, homo, (2400, 1300))
+		# hori = np.concatenate((img, homoimage), axis=1)
  		# Press 'q' to exit the loop
-		cv2.imshow("result",hori)
+		cv2.imshow("result",img)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
  
