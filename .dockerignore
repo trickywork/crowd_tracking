@@ -1,0 +1,9 @@
+.git
+.venv
+__pycache__
+*.pyc
+app/jobs/*
+sample_data
+runs
+models
+

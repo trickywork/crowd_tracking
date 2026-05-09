@@ -1,0 +1,2 @@
+"""Crowd tracking FastAPI application."""
+

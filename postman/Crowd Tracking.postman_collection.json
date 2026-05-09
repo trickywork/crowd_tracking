@@ -1,0 +1,43 @@
+{
+  "info": {
+    "name": "Crowd Tracking",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/health"
+      }
+    },
+    {
+      "name": "Create Tracking Job",
+      "request": {
+        "method": "POST",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "video", "type": "file", "src": "" },
+            { "key": "model_name", "value": "yolo11n.pt", "type": "text" },
+            { "key": "confidence", "value": "0.35", "type": "text" },
+            { "key": "max_frames", "value": "450", "type": "text" }
+          ]
+        },
+        "url": "{{base_url}}/api/jobs"
+      }
+    },
+    {
+      "name": "Get Job",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/jobs/{{job_id}}"
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8090" },
+    { "key": "job_id", "value": "" }
+  ]
+}
+

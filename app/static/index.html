@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crowd Tracking</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <div class="upload-panel">
+          <div class="eyebrow">Video trajectory lab</div>
+          <h1>Crowd Tracking</h1>
+          <p class="lede">Upload a crowd clip and generate a tracked MP4 with a live trajectory map beside each frame.</p>
+
+          <form id="uploadForm" class="controls">
+            <label class="file-drop">
+              <span id="fileLabel">Choose video</span>
+              <input id="videoInput" name="video" type="file" accept=".mp4,.mov,.avi,.mkv,.webm,video/*" required />
+            </label>
+
+            <div class="control-grid">
+              <label>
+                <span>Model</span>
+                <select name="model_name">
+                  <option value="yolo11n.pt">YOLO11n</option>
+                  <option value="yolo11s.pt">YOLO11s</option>
+                  <option value="yolov8n.pt">YOLOv8n fallback</option>
+                </select>
+              </label>
+              <label>
+                <span>Confidence</span>
+                <input name="confidence" type="range" min="0.1" max="0.8" value="0.35" step="0.05" />
+              </label>
+              <label>
+                <span>Max frames</span>
+                <input name="max_frames" type="number" min="0" max="3000" value="450" />
+              </label>
+            </div>
+
+            <button type="submit">Start tracking</button>
+          </form>
+        </div>
+
+        <div class="result-panel">
+          <div class="status-row">
+            <div>
+              <span class="eyebrow">Current run</span>
+              <h2 id="statusTitle">Idle</h2>
+            </div>
+            <span id="statusBadge" class="badge">ready</span>
+          </div>
+
+          <div id="summary" class="summary-grid"></div>
+          <div id="media" class="media-grid"></div>
+          <div id="downloads" class="downloads"></div>
+        </div>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
+
