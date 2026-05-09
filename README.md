@@ -29,7 +29,7 @@ Target: ghs.googlehosted.com
 - NumPy
 - HTML/CSS/JavaScript frontend served by FastAPI
 - Docker, Artifact Registry, Google Cloud Build, Google Cloud Run
-- Postman collection for API testing
+- API testing via local Postman workspace
 
 ## Project Structure
 
@@ -44,8 +44,6 @@ crowd_tracking/
       styles.css
   docs/
     configuration.md
-  postman/
-    Crowd Tracking.postman_collection.json
   scripts/
     create_demo_video.py
   data/
@@ -129,10 +127,10 @@ Cloud Run can use the same defaults. The YOLO model is downloaded/cached during 
 
 ## Postman
 
-Import:
+Use the local Postman workspace collection:
 
 ```text
-postman/Crowd Tracking.postman_collection.json
+Crowd Tracking - Local API Tests
 ```
 
 Suggested variables:
@@ -146,6 +144,12 @@ For Cloud Run:
 
 ```text
 baseUrl=https://crowd-tracking-gb7rmueyna-uc.a.run.app
+```
+
+The repo-exported backup copy is stored outside GitHub at:
+
+```text
+/Users/junliu/CourseArtifacts/postman/project-exported/Crowd Tracking.postman_collection.json
 ```
 
 ## Tests And Smoke Checks
