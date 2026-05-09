@@ -23,6 +23,12 @@ Open `http://localhost:8090`.
 
 The Cloud Run profile uses CPU-only inference and keeps `min-instances=0` and `max-instances=1` for cost control. The first request may be slow because model weights are loaded into memory.
 
+Current service URL:
+
+```text
+https://crowd-tracking-gb7rmueyna-uc.a.run.app
+```
+
 Recommended service settings:
 
 ```text
@@ -34,3 +40,8 @@ min instances: 0
 max instances: 1
 ```
 
+The `crowdtracking.junliu.dev` domain mapping is created in Cloud Run. Add this Cloudflare DNS record to start certificate provisioning:
+
+```text
+crowdtracking CNAME ghs.googlehosted.com
+```

@@ -45,9 +45,26 @@ GET  /api/jobs/{job_id}/files/trajectories.json
 
 ## Deployment
 
+Live service:
+
+```text
+https://crowd-tracking-gb7rmueyna-uc.a.run.app
+```
+
 ```bash
 gcloud builds submit --config cloudbuild.yaml --project caramel-vim-441513-e1
 ```
 
-The Cloud Run service is configured for low-cost portfolio use: zero minimum instances, one maximum instance, and CPU-only inference.
+The Cloud Run service is configured for low-cost portfolio use: zero minimum instances, one maximum instance, and CPU-only inference. Images are stored in Artifact Registry:
 
+```text
+us-central1-docker.pkg.dev/caramel-vim-441513-e1/portfolio-apps/crowd-tracking
+```
+
+Custom domain mapping has been prepared for `crowdtracking.junliu.dev`. Cloudflare DNS still needs this record before the managed certificate can finish provisioning:
+
+```text
+Type: CNAME
+Name: crowdtracking
+Target: ghs.googlehosted.com
+```
