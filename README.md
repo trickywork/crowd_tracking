@@ -5,7 +5,7 @@ Crowd Tracking is a FastAPI web app for tracking people in short video clips. It
 ## Live Demo
 
 - Cloud Run service: `crowd-tracking`
-- Cloud Run URL: `https://crowd-tracking-888561484971.us-central1.run.app`
+- Cloud Run URL: `https://crowd-tracking-gb7rmueyna-uc.a.run.app`
 - Planned portfolio URL: `https://crowdtracking.junliu.dev`
 - Google Cloud project: `caramel-vim-441513-e1`
 - Region: `us-central1`
@@ -145,7 +145,7 @@ videoPath=/absolute/path/to/video.mp4
 For Cloud Run:
 
 ```text
-baseUrl=https://crowd-tracking-888561484971.us-central1.run.app
+baseUrl=https://crowd-tracking-gb7rmueyna-uc.a.run.app
 ```
 
 ## Tests And Smoke Checks
