@@ -1,5 +1,7 @@
 # Crowd Tracking
 
+[![CI](https://github.com/trickywork/crowd_tracking/actions/workflows/ci.yml/badge.svg)](https://github.com/trickywork/crowd_tracking/actions/workflows/ci.yml)
+
 Crowd Tracking is a FastAPI web app for tracking people in short video clips. It accepts common video formats, detects people with YOLO, tracks identities with DeepSORT, and produces visual outputs that make a person's movement easier to inspect frame by frame.
 
 ## Live Demo
@@ -67,7 +69,7 @@ crowd_tracking/
 Create and activate a virtual environment:
 
 ```bash
-cd /Users/junliu/git_repo/crowd_tracking
+cd crowd_tracking
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -146,11 +148,7 @@ For Cloud Run:
 baseUrl=https://crowd-tracking-gb7rmueyna-uc.a.run.app
 ```
 
-The repo-exported backup copy is stored outside GitHub at:
-
-```text
-/Users/junliu/CourseArtifacts/postman/project-exported/Crowd Tracking.postman_collection.json
-```
+The exported backup copy is kept in a private local archive outside this public repo.
 
 ## Tests And Smoke Checks
 
